@@ -12,9 +12,12 @@ def health():
 
 @app.route("/version")
 def version():
-    return {"version": "1.0.0"}
+    return {
+        "application": "RENUJA DevOps Project",
+        "version": "1.0.0"
+    }
 
-    
 
 if __name__ == "__main__":
     app.run()
+
