@@ -1,0 +1,20 @@
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "RENUJA DevOps Project"
+
+@app.route("/health")
+def health():
+    return {"status": "healthy"}
+
+@app.route("/version")
+def version():
+    return {"version": "1.0.0"}
+
+    
+
+if __name__ == "__main__":
+    app.run()
