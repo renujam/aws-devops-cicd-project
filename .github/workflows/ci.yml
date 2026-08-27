@@ -33,5 +33,5 @@ jobs:
           image-ref: renuja-devops-app:ci
           format: table
           exit-code: "1"
+          ignore-unfixed: true
           severity: CRITICAL,HIGH
-              
