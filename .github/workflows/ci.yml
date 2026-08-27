@@ -52,3 +52,10 @@ jobs:
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2.1.6
+
+      - name: Tag Docker image for ECR
+        run: docker tag renuja-devops-app:ci 486940689963.dkr.ecr.us-east-1.amazonaws.com/renuja-devops-app:${{ github.sha }}
+
+      - name: Push Docker image to ECR
+        run: docker push 486940689963.dkr.ecr.us-east-1.amazonaws.com/renuja-devops-app:${{ github.sha }}
+        
