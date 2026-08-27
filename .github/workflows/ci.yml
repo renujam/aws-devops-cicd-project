@@ -26,4 +26,12 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t renuja-devops-app:ci .
-          
+
+      - name: Scan Docker image
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: renuja-devops-app:ci
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+              
