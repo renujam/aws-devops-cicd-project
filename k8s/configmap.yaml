@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: renuja-devops-config
+  namespace: renuja-devops
+
+data:
+  APP_ENV: "staging"
+  APP_NAME: "RENUJA DevOps Project"
