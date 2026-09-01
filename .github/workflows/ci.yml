@@ -79,7 +79,6 @@ jobs:
         run: |
           kubectl apply -f k8s/configmap.yaml
           kubectl apply -f k8s/serviceaccount.yaml
-          kubectl apply -f k8s/secretproviderclass.yaml
           kubectl apply -f k8s/service.yaml
 
       - name: Deploy new image to EKS
