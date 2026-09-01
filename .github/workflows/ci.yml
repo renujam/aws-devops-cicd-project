@@ -74,13 +74,22 @@ jobs:
             --region us-east-1 \
             --name renuja-devops-eks
 
+      - name: Apply EKS application resources
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          kubectl apply -f k8s/configmap.yaml
+          kubectl apply -f k8s/serviceaccount.yaml
+          kubectl apply -f k8s/secretproviderclass.yaml
+          kubectl apply -f k8s/service.yaml
+
       - name: Deploy new image to EKS
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           kubectl set image \
-            deployment/renuja-devops-app \
+            --local \
+            -f k8s/deployment-eks.yaml \
             renuja-devops-app=486940689963.dkr.ecr.us-east-1.amazonaws.com/renuja-devops-app:${{ github.sha }} \
-            -n renuja-devops
+            -o yaml | kubectl apply -f -
 
       - name: Verify EKS rollout
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

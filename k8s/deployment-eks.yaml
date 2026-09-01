@@ -18,15 +18,20 @@ spec:
         app: renuja-devops-app
 
     spec:
+      serviceAccountName: renuja-devops-app-sa
       containers:
         - name: renuja-devops-app
-          image: 486940689963.dkr.ecr.us-east-1.amazonaws.com/renuja-devops-app:a8c0a9afda57b5db87e2a7bb84f2157b5197675c
+          image: 486940689963.dkr.ecr.us-east-1.amazonaws.com/renuja-devops-app:placeholder
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: renuja-devops-config
-            - secretRef:
-                name: renuja-devops-secret
+
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+
           ports:
             - containerPort: 5000
 
@@ -51,3 +56,11 @@ spec:
             limits:
               cpu: "250m"
               memory: "128Mi"
+
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: renuja-devops-secrets
