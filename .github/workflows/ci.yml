@@ -66,4 +66,26 @@ jobs:
       - name: Push Docker image to ECR
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: docker push 486940689963.dkr.ecr.us-east-1.amazonaws.com/renuja-devops-app:${{ github.sha }}
-        
+
+      - name: Configure kubectl for EKS
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          aws eks update-kubeconfig \
+            --region us-east-1 \
+            --name renuja-devops-eks
+
+      - name: Deploy new image to EKS
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          kubectl set image \
+            deployment/renuja-devops-app \
+            renuja-devops-app=486940689963.dkr.ecr.us-east-1.amazonaws.com/renuja-devops-app:${{ github.sha }} \
+            -n renuja-devops
+
+      - name: Verify EKS rollout
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          kubectl rollout status \
+            deployment/renuja-devops-app \
+            -n renuja-devops \
+            --timeout=180s
